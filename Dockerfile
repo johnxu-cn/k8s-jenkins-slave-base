@@ -44,6 +44,4 @@ COPY --from=build-node-env /usr/local/bin  /usr/local/bin
 COPY --from=build-node-env /usr/local/lib  /usr/local/lib
 COPY --from=build-node-env /opt/yarn-v1.15.2  /opt/yarn-v1.15.2
 
-USER jenkins:jenkins
-
 ENTRYPOINT ["jenkins-slave"]
