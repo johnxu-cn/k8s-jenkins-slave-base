@@ -5,37 +5,32 @@ FROM  node:8.16-stretch  as build-node-env
 WORKDIR /usr/local/bin
 
 FROM jenkins/jnlp-slave:3.29-1
+
+USER root:root
+
 # Adjust china time zone
 RUN apt update \
     && apt install -y  tzdata \
     && rm /etc/localtime \
     && ln -s /usr/share/zoneinfo/Asia/Shanghai /etc/localtime
 
-# Remove openjdk
-RUN  apt remove -y openjdk*
-
-# Install git
-RUN apt-get update \
-    && apt-get install -y git wget
-
 # Install oracle jdk8
-RUN wget --no-check-certificate --header "Cookie: oraclelicense=accept-securebackup-cookie" \
-    http://download.oracle.com/otn-pub/java/jdk/8u172-b11/a58eab1ec242421181065cdc37240b08/jdk-8u172-linux-x64.tar.gz  && \
+RUN  wget -c --header "Cookie: oraclelicense=accept-securebackup-cookie" http://download.oracle.com/otn-pub/java/jdk/8u131-b11/d54c1d3a095b4ff2b6607d096fa80163/jdk-8u131-linux-x64.tar.gz  && \
     mkdir /opt/jdk && \
-    tar -zxf jdk-8u172-linux-x64.tar.gz -C /opt/jdk && \
-    rm jdk-8u172-linux-x64.tar.gz && \
-    update-alternatives --install /usr/bin/java  java  /opt/jdk/jdk1.8.0_172/bin/java 100 && \
-    update-alternatives --install /usr/bin/javac javac /opt/jdk/jdk1.8.0_172/bin/javac 100 && \
-    update-alternatives --install /usr/bin/jar   jar   /opt/jdk/jdk1.8.0_172/bin/jar 100 && \
-    ln -s /opt/jdk/jdk1.8.0_172 /opt/jdk/latest
+    tar -zxf jdk-8u131-linux-x64.tar.gz -C /opt/jdk && \
+    rm jdk-8u131-linux-x64.tar.gz && \
+    update-alternatives --install /usr/bin/java  java  /opt/jdk/jdk1.8.0_131/bin/java 100 && \
+    update-alternatives --install /usr/bin/javac javac /opt/jdk/jdk1.8.0_131/bin/javac 100 && \
+    update-alternatives --install /usr/bin/jar   jar   /opt/jdk/jdk1.8.0_131/bin/jar 100 && \
+    ln -s /opt/jdk/jdk1.8.0_131 /opt/jdk/latest
 
-# Install maven 3.3.9
-RUN wget http://mirrors.sonic.net/apache/maven/maven-3/3.5.3/binaries/apache-maven-3.5.3-bin.tar.gz && \
-    tar -zxf apache-maven-3.5.3-bin.tar.gz && \
-    mv apache-maven-3.5.3 /usr/local && \
-    rm -f apache-maven-3.5.3-bin.tar.gz && \
-    ln -s /usr/local/apache-maven-3.5.3/bin/mvn /usr/bin/mvn && \
-    ln -s /usr/local/apache-maven-3.5.3 /usr/local/apache-maven
+# Install maven 3.6.1
+RUN wget http://mirrors.sonic.net/apache/maven/maven-3/3.6.1/binaries/apache-maven-3.6.1-bin.tar.gz && \
+    tar -zxf apache-maven-3.6.1-bin.tar.gz && \
+    mv apache-maven-3.6.1 /usr/local && \
+    rm -f apache-maven-3.6.1-bin.tar.gz && \
+    ln -s /usr/local/apache-maven-3.6.1/bin/mvn /usr/bin/mvn && \
+    ln -s /usr/local/apache-maven-3.6.1 /usr/local/apache-maven
 
 COPY --from=build-android-sdk-env /opt /opt
 
@@ -48,5 +43,7 @@ ENV ANDROID_HOME /opt/android-sdk \
 COPY --from=build-node-env /usr/local/bin  /usr/local/bin 
 COPY --from=build-node-env /usr/local/lib  /usr/local/lib
 COPY --from=build-node-env /opt/yarn-v1.15.2  /opt/yarn-v1.15.2
+
+USER jenkins:jenkins
 
 ENTRYPOINT ["jenkins-slave"]
