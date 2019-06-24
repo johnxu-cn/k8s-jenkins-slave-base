@@ -5,12 +5,12 @@ FROM  node:8.16-stretch  as build-node-env
 WORKDIR /usr/local/bin
 
 FROM jenkins/jnlp-slave:3.29-1
-
 # Adjust china time zone
 RUN apt update \
     && apt install -y  tzdata \
     && rm /etc/localtime \
     && ln -s /usr/share/zoneinfo/Asia/Shanghai /etc/localtime
+
 # Remove openjdk
 RUN  apt remove -y openjdk*
 
