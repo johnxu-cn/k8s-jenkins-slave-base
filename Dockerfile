@@ -9,15 +9,16 @@ FROM jenkins/jnlp-slave:3.29-1
 USER root:root
 
 # Adjust china time zone
-RUN apt update \
-    && apt install -y  tzdata \
+RUN ap-get update \
+    && apt-get  install -y  tzdata \
     && rm /etc/localtime \
     && ln -s /usr/share/zoneinfo/Asia/Shanghai /etc/localtime
 
 # Install oracle jdk8
+RUN  mkdir /usr/local/jdk
 RUN  wget -c --header "Cookie: oraclelicense=accept-securebackup-cookie" -P /usr/local/jdk  http://download.oracle.com/otn-pub/java/jdk/8u131-b11/d54c1d3a095b4ff2b6607d096fa80163/jdk-8u131-linux-x64.tar.gz  && \
     tar -zxf /usrl/local/jdk/jdk-8u131-linux-x64.tar.gz -C /usr/local && \
-    rm -f /usr/local/jdk/jdk-8u131-linux-x64.tar.gz && \
+    rm -f /usr/local/jdk/jdk-8u131-linux-x64.tar.gz 
 
 ENV  JAVA_HOME=/usr/local/jdk1.8.0_131
 ENV  CLASSPATH=$JAVA_HOME/bin
