@@ -39,6 +39,11 @@ ENV ANDROID_HOME /opt/android-sdk \
     && PATH ${PATH}:${GRADLE_HOME}/bin:${KOTLIN_HOME}/bin:${ANDROID_HOME}/emulator:${ANDROID_HOME}/tools:${ANDROID_HOME}/platform-tools:${ANDROID_HOME}/tools/bin \
     && LD_LIBRARY_PATH ${ANDROID_HOME}/emulator/lib64:${ANDROID_HOME}/emulator/lib64/qt/lib
 
+ENV  GRADLE_HOME=/opt/gradle
+ENV  CLASSPATH=$GRADLE_HOME/bin
+ENV  PATH="$GRADLE_HOME/bin:$PATH"
+
+
 COPY --from=build-node-env /usr/local/bin  /usr/local/bin 
 COPY --from=build-node-env /usr/local/lib  /usr/local/lib
 COPY --from=build-node-env /opt/yarn-v1.15.2  /opt/yarn-v1.15.2
