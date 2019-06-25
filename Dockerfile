@@ -15,14 +15,13 @@ RUN apt update \
     && ln -s /usr/share/zoneinfo/Asia/Shanghai /etc/localtime
 
 # Install oracle jdk8
-RUN  wget -c --header "Cookie: oraclelicense=accept-securebackup-cookie" http://download.oracle.com/otn-pub/java/jdk/8u131-b11/d54c1d3a095b4ff2b6607d096fa80163/jdk-8u131-linux-x64.tar.gz  && \
-    mkdir /opt/jdk && \
-    tar -zxf jdk-8u131-linux-x64.tar.gz -C /opt/jdk && \
-    rm jdk-8u131-linux-x64.tar.gz && \
-    update-alternatives --install /usr/bin/java  java  /opt/jdk/jdk1.8.0_131/bin/java 100 && \
-    update-alternatives --install /usr/bin/javac javac /opt/jdk/jdk1.8.0_131/bin/javac 100 && \
-    update-alternatives --install /usr/bin/jar   jar   /opt/jdk/jdk1.8.0_131/bin/jar 100 && \
-    ln -s /opt/jdk/jdk1.8.0_131 /opt/jdk/latest
+RUN  wget -c --header "Cookie: oraclelicense=accept-securebackup-cookie" -P /usr/local/jdk  http://download.oracle.com/otn-pub/java/jdk/8u131-b11/d54c1d3a095b4ff2b6607d096fa80163/jdk-8u131-linux-x64.tar.gz  && \
+    tar -zxf /usrl/local/jdk/jdk-8u131-linux-x64.tar.gz -C /usr/local && \
+    rm -f /usr/local/jdk/jdk-8u131-linux-x64.tar.gz && \
+
+ENV  JAVA_HOME=/usr/local/jdk1.8.0_131
+ENV  CLASSPATH=$JAVA_HOME/bin
+ENV  PATH="$JAVA_HOME/bin:$PATH"
 
 # Install maven 3.6.1
 RUN wget http://mirrors.sonic.net/apache/maven/maven-3/3.6.1/binaries/apache-maven-3.6.1-bin.tar.gz && \
