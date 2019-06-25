@@ -9,7 +9,7 @@ FROM jenkins/jnlp-slave:3.29-1
 USER root:root
 
 # Adjust china time zone
-RUN ap  update \
+RUN apt update \
     && apt  install -y  tzdata \
     && rm /etc/localtime \
     && ln -s /usr/share/zoneinfo/Asia/Shanghai /etc/localtime
