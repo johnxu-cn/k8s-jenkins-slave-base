@@ -33,11 +33,11 @@ RUN wget http://mirrors.sonic.net/apache/maven/maven-3/3.6.1/binaries/apache-mav
 
 COPY --from=build-android-sdk-env /opt /opt
 
-ENV ANDROID_HOME /opt/android-sdk \
-    && GRADLE_HOME /opt/gradle  \
-    && KOTLIN_HOME /opt/kotlinc \
-    && PATH ${PATH}:${GRADLE_HOME}/bin:${KOTLIN_HOME}/bin:${ANDROID_HOME}/emulator:${ANDROID_HOME}/tools:${ANDROID_HOME}/platform-tools:${ANDROID_HOME}/tools/bin \
-    && LD_LIBRARY_PATH ${ANDROID_HOME}/emulator/lib64:${ANDROID_HOME}/emulator/lib64/qt/lib
+ENV  ANDROID_HOME /opt/android-sdk 
+ENV  GRADLE_HOME /opt/gradle  
+ENV  KOTLIN_HOME /opt/kotlinc 
+ENV  PATH ${PATH}:${GRADLE_HOME}/bin:${KOTLIN_HOME}/bin:${ANDROID_HOME}/emulator:${ANDROID_HOME}/tools:${ANDROID_HOME}/platform-tools:${ANDROID_HOME}/tools/bin
+ENV LD_LIBRARY_PATH ${ANDROID_HOME}/emulator/lib64:${ANDROID_HOME}/emulator/lib64/qt/lib
 
 ENV  GRADLE_HOME=/opt/gradle
 ENV  CLASSPATH=$GRADLE_HOME/bin
